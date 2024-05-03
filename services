@@ -1,0 +1,17 @@
+import bcrypt
+import utils
+from utils import check_password
+import db
+
+def login(username, password):
+    # Connect to the database
+    db_connection = db.connect()
+
+    # Fetch the hashed password associated with the provided username from the database
+    hashed_password = db.fetch_password(username)
+
+    # Check if the username exists and the password is correct
+    if hashed_password:
+        if check_password(password, hashed_password):
+            return True  # Login successful
+    return False  # Login failed
