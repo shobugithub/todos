@@ -32,8 +32,9 @@ create_todo_table = """
 
 def commit(func):
     def wrapper(*args, **kwargs):
-        func()
+        result = func(*args, **kwargs)
         conn.commit()
+        return result
 
     return wrapper
 
@@ -49,14 +50,13 @@ def migrate():
     insert_admin_query = '''insert into users(username,password,role,status,login_try_count)
          values (%s,%s,%s,%s,%s);
     '''
-    insert_data_params = ('admin', utils.hash_password('LevRaven.1'), 'ADMIN', 'ACTIVE', 0)
+    insert_data_params = ('admin', utils.hash_password('123'), 'ADMIN', 'ACTIVE', 0)
     cur.execute(insert_admin_query, insert_data_params)
 
 
 def init():
     create_tables()
     migrate()
-
 
 if __name__ == '__main__':
     init()
